@@ -40,8 +40,11 @@ def custo_total(matriz, lista):
     return custo
 
 def mais_distante(matriz, ciclo_inicial):
-    print '\n\n#################### INICIANDO ######################'
+    print '\n\n######## INICIANDO: CRITERIO MAIS DISTANTE ##########'
     print 'Ciclo inicial: ', ciclo_inicial
+
+    # Transformando para o equivalente (ie. Vetor iniciando em 0)
+    ciclo_inicial = [x - 1 for x in ciclo_inicial]
     
     while len(ciclo_inicial) < TAM_M:
         distancia_vertice = -1
@@ -78,12 +81,18 @@ def mais_distante(matriz, ciclo_inicial):
     ciclo_final.append(ciclo_final[0])
     print 'Ciclo: ', ciclo_final
 
-    print 'Custo Total: ', custo_total(matriz, ciclo_inicial)
+    custo = custo_total(matriz, ciclo_inicial)
+    print 'Custo Total: ', custo
     print '#####################################################\n'
 
+    return (ciclo_final, custo)
+
 def mais_proximo(matriz, ciclo_inicial):
-    print '\n\n#################### INICIANDO ######################'
+    print '\n\n######## INICIANDO: CRITERIO MAIS PROXIMO ###########'
     print 'Ciclo inicial: ', ciclo_inicial
+
+    # Transformando para o equivalente (ie. Vetor iniciando em 0)
+    ciclo_inicial = [x - 1 for x in ciclo_inicial]
     
     while len(ciclo_inicial) < TAM_M:
         distancia_vertice = 1000000
@@ -120,8 +129,11 @@ def mais_proximo(matriz, ciclo_inicial):
     ciclo_final.append(ciclo_final[0])
     print 'Ciclo: ', ciclo_final
 
-    print 'Custo Total: ', custo_total(matriz, ciclo_inicial)
+    custo = custo_total(matriz, ciclo_inicial)
+    print 'Custo Total: ', custo
     print '#####################################################\n'
+
+    return (ciclo_final, custo)
     
 # Inicio do programa
 print '#####################################################'
@@ -134,21 +146,48 @@ print 'Gerando ciclo inicial aleatorio de tamanho 3...'
 ciclo_inicial = gera_ciclo(1, TAM_M, 3)
 print ciclo_inicial
 
-# Transformando para o equivalente (ie. Vetor iniciando em 0)
-ciclo_inicial = [x - 1 for x in ciclo_inicial]
-
 # Ler matriz do arquivo
 matriz = matriz_arquivo()
 
-criterio = -1
-while criterio:
-    criterio = input('\nQual criterio voce deseja?\n(1) Mais proximo | (2) Mais distante | (0) Sair\n')
+print '\n-----------------------------------------------------------------------'
+proximo = mais_proximo(matriz, ciclo_inicial)
+print '\n-----------------------------------------------------------------------'
+distante = mais_distante(matriz, ciclo_inicial)
 
-    if criterio == 1:
-        mais_proximo(matriz, ciclo_inicial)
-    elif criterio == 2:
-        mais_distante(matriz, ciclo_inicial)
-    elif criterio == 0:
-        print '\nSaiu.'
-    else:
-        print '\nInvalido!'
+print '-----------------------------------------------------------------------\n'
+
+print '#####################################################'
+print '####                                             ####'
+print '####                 RESULTADO                   ####'
+print '####                                             ####'
+print '#####################################################\n'
+
+print 'Ciclo inicial: ', ciclo_inicial
+
+print '\n-'
+print 'MAIS PROXIMO:'
+print 'Ciclo Final: ', proximo[0]
+print 'Custo: ', proximo[1]
+print '-'
+
+print 'MAIS DISTANTE:'
+print 'Ciclo Final: ', distante[0]
+print 'Custo: ', distante[1]
+print '-'
+
+print '\nPortanto...\n'
+print 'SOLUCAO APROXIMADA:'
+if proximo[1] < distante[1]:
+    print 'Criterio do mais proximo obteve um melhor resultado'
+    print 'Ciclo: ', proximo[0]
+    print 'Custo: ', proximo[1]
+elif proximo[1] > distante[1]:
+    print 'Criterio do mais distante obteve um melhor resultado'
+    print 'Ciclo: ', distante[0]
+    print 'Custo: ', distante[1]
+else:
+    'Os dois criterios obtiveram o mesmo custo'
+    print 'Ciclo do mais proximo: ', proximo[0]
+    print 'Ciclo do mais distante: ', distante[0]
+
+print '\n-----------------------------------------------------------------------\n'
